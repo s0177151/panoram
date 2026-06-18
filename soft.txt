@@ -1,0 +1,2 @@
+https://sourceforge.net/projects/opencvlibrary/files/4.5.5/opencv-4.5.5-vc14_vc15.exe/download
+https://gitlab.com/libeigen/eigen/-/releases/5.0.0
