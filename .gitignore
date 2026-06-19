@@ -361,3 +361,27 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+venv/
+env/
+.venv/
+.python-version
+
+# Результаты работы
+panorama_result.jpg
+*.log
+*.tmp
+
+# Python скрипт в корне (не игнорируем!)
+# panorama_gui.py
+# requirements.txt
