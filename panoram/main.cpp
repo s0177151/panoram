@@ -667,12 +667,17 @@ public:
 int main(int argc, char** argv) {
     setlocale(LC_ALL, "Russian");
 
-    if (argc < 3) {
-        cout << "Использование: " << argv[0] << " <изображения...>\n"
-            << "  Пример: " << argv[0] << " img1.jpg img2.jpg img3.jpg\n";
-        system("pause");
+    if (argc < 4) {;
         return -1;
     }
+
+    string mode_str = argv[1];
+    StitchingMode mode = StitchingMode::FAST;
+    if (mode_str == "quality") {
+        mode = StitchingMode::QUALITY;
+    }
+
+    string output_file = argv[argc - 1];
 
     PanoramaStitcher stitcher(
         0.002f,     // threshold 
@@ -685,12 +690,15 @@ int main(int argc, char** argv) {
         300,        // ransac_iterations 
         5.0f,       // ransac_threshold
         0.95,       // ransac_confidence 
-        StitchingMode::FAST
+        mode
     );
 
 
-    for (int i = 1; i < argc; i++) {
-        stitcher.addImage(argv[i]);
+    for (int i = 2; i < argc - 1; i++) {
+        if (!stitcher.addImage(argv[i])) {
+            cerr << "Ошибка загрузки изображения: " << argv[i] << endl;
+            return -1;
+        }
     }
 
     if (stitcher.getImageCount() < 2) {
@@ -701,11 +709,12 @@ int main(int argc, char** argv) {
     Mat panorama = stitcher.stitch();
 
     if (!panorama.empty()) {
-        stitcher.savePanorama("panorama_result.jpg", 95);
-        namedWindow("Панорама", WINDOW_NORMAL);
-        resizeWindow("Панорама", 1200, 800);
-        imshow("Панорама", panorama);
-        waitKey(0);
+        stitcher.savePanorama(output_file, 95);
+        cout << "PANORAMA_SAVED:" << output_file << endl;
+    }
+    else {
+        cout << "PANORAMA_ERROR: Ошибка создания панорамы" << endl;
+        return -1;
     }
 
     return 0;
