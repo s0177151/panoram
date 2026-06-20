@@ -15,7 +15,8 @@ cd panoram
 git checkout feature/python-gui
 pip install -r requirements.txt
 ```
-
+Требуется библиотеки opencv и eigen
+И самостоятельная настройка
 Сборка C++ части (если EXE отсутствует)
 Откройте panoram.sln в Visual Studio
 
