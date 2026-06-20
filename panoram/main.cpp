@@ -63,7 +63,7 @@ private:
 
     Ptr<AKAZE> akaze_detector;
 
-    // —Ú‡ÚËÒÚËÍ‡
+    // –°—Ç–∞—Ç–∏—Å—Ç–∏–∫–∞
     double time_detection = 0;
     double time_matching_homography = 0;
     double time_stitching = 0;
@@ -95,7 +95,7 @@ public:
 
     bool addImage(const string& path) {
         Mat img = imread(path, IMREAD_COLOR);
-        if (img.empty()) { cerr << "Œ¯Ë·Í‡: " << path << endl; return false; }
+        if (img.empty()) { cerr << "–û—à–∏–±–∫–∞: " << path << endl; return false; }
 
         ImageData d;
         d.color_image = img.clone();
@@ -105,7 +105,7 @@ public:
 
         images.push_back(d);
         is_panorama_computed = false;
-        cout << "«‡„ÛÊÂÌÓ: " << path << " (" << d.image.cols << "x" << d.image.rows << ")" << endl;
+        cout << "–ó–∞–≥—Ä—É–∂–µ–Ω–æ: " << path << " (" << d.image.cols << "x" << d.image.rows << ")" << endl;
         return true;
     }
 
@@ -124,7 +124,7 @@ public:
     }
 
     void computeExposureCompensation() {
-        cout << "\n---  ÓÏÔÂÌÒ‡ˆËˇ ˝ÍÒÔÓÁËˆËË ---" << endl;
+        cout << "\n--- –ö–æ–º–ø–µ–Ω—Å–∞—Ü–∏—è —ç–∫—Å–ø–æ–∑–∏—Ü–∏–∏ ---" << endl;
         int n = (int)images.size();
         if (n < 2) return;
 
@@ -143,7 +143,7 @@ public:
 
         for (int i = 0; i < n; i++) {
             images[i].gain = max(0.5f, min(2.0f, gains[i]));
-            cout << "  »ÁÓ·‡ÊÂÌËÂ " << i << " ÍÓ˝ÙÙËˆËÂÌÚ ÛÒËÎÂÌËˇ: " << images[i].gain << endl;
+            cout << "  –ò–∑–æ–±—Ä–∞–∂–µ–Ω–∏–µ " << i << " –∫–æ—ç—Ñ—Ñ–∏—Ü–∏–µ–Ω—Ç —É—Å–∏–ª–µ–Ω–∏—è: " << images[i].gain << endl;
         }
     }
 
@@ -200,10 +200,10 @@ public:
     }
 
     void detectAll() {
-        cout << "\n=== ›Ú‡Ô 1: Œ·Ì‡ÛÊÂÌËÂ ÍÎ˛˜Â‚˚ı ÚÓ˜ÂÍ Ì‡ " << images.size() << " ËÁÓ·‡ÊÂÌËˇı ===" << endl;
+        cout << "\n=== –≠—Ç–∞–ø 1: –û–±–Ω–∞—Ä—É–∂–µ–Ω–∏–µ –∫–ª—é—á–µ–≤—ã—Ö —Ç–æ—á–µ–∫ –Ω–∞ " << images.size() << " –∏–∑–æ–±—Ä–∞–∂–µ–Ω–∏—è—Ö ===" << endl;
         keypoints_count.clear();
         for (size_t i = 0; i < images.size(); i++) {
-            cout << "  »ÁÓ·‡ÊÂÌËÂ " << i << "... " << flush;
+            cout << "  –ò–∑–æ–±—Ä–∞–∂–µ–Ω–∏–µ " << i << "... " << flush;
             auto start = chrono::high_resolution_clock::now();
             akaze_detector->detectAndCompute(images[i].image, noArray(),
                 images[i].keypoints, images[i].descriptors);
@@ -211,7 +211,7 @@ public:
             chrono::duration<double> elapsed = end - start;
             time_detection += elapsed.count();
             keypoints_count.push_back(images[i].keypoints.size());
-            cout << images[i].keypoints.size() << " ÍÎ˛˜Â‚˚ı ÚÓ˜ÂÍ" << endl;
+            cout << images[i].keypoints.size() << " –∫–ª—é—á–µ–≤—ã—Ö —Ç–æ—á–µ–∫" << endl;
         }
     }
 
@@ -382,7 +382,7 @@ public:
     }
 
     Mat stitchFast() {
-        cout << "\n=== ¡€—“–€… –≈∆»Ã ===" << endl;
+        cout << "\n=== –ë–´–°–¢–†–´–ô –†–ï–ñ–ò–ú ===" << endl;
         int n = (int)images.size();
         if (n < 2) return Mat();
 
@@ -390,7 +390,7 @@ public:
 
         int ref = n / 2;
         ref_index = ref;
-        cout << "ŒÔÓÌÓÂ ËÁÓ·‡ÊÂÌËÂ: " << ref << endl;
+        cout << "–û–ø–æ—Ä–Ω–æ–µ –∏–∑–æ–±—Ä–∞–∂–µ–Ω–∏–µ: " << ref << endl;
 
         vector<Mat> local_forward(n - 1);
         matches_after_ratio.clear();
@@ -407,7 +407,7 @@ public:
             local_forward[i] = ransac(images[i].keypoints, images[i + 1].keypoints, sel, images[i].image.size(), inl);
             float inlier_ratio = (float)inl / matches.size() * 100.0f;
             inlier_ratios.push_back(inlier_ratio);
-            cout << "  œ‡‡ " << i << "->" << i + 1 << ": " << inl << " inliers (‰ÓÎˇ: " << inlier_ratio << "%)" << endl;
+            cout << "  –ü–∞—Ä–∞ " << i << "->" << i + 1 << ": " << inl << " inliers (–¥–æ–ª—è: " << inlier_ratio << "%)" << endl;
         }
 
         auto matching_end = chrono::high_resolution_clock::now();
@@ -446,7 +446,7 @@ public:
         int off_x = (int)floor(max(0.0f, -min_x)), off_y = (int)floor(max(0.0f, -min_y));
         int pw = (int)ceil(max_x - min_x), ph = (int)ceil(max_y - min_y);
 
-        cout << "–‡ÁÏÂ Ô‡ÌÓ‡Ï˚: " << pw << "x" << ph << endl;
+        cout << "–†–∞–∑–º–µ—Ä –ø–∞–Ω–æ—Ä–∞–º—ã: " << pw << "x" << ph << endl;
 
         Mat T = (Mat_<double>(3, 3) << 1, 0, off_x, 0, 1, off_y, 0, 0, 1);
 
@@ -473,8 +473,8 @@ public:
 
 
 
-    Mat stitchQuality() {
-        cout << "\n===  ¿◊≈—“¬≈ÕÕ€… –≈∆»Ã ===" << endl;
+        Mat stitchQuality() {
+        cout << "\n=== –ö–ê–ß–ï–°–¢–í–ï–ù–ù–´–ô –†–ï–ñ–ò–ú ===" << endl;
         int n = (int)images.size();
         if (n < 2) return Mat();
 
@@ -482,8 +482,9 @@ public:
 
         int ref = n / 2;
         ref_index = ref;
-        cout << "ŒÔÓÌÓÂ ËÁÓ·‡ÊÂÌËÂ " << ref << endl;
+        cout << "–û–ø–æ—Ä–Ω–æ–µ –∏–∑–æ–±—Ä–∞–∂–µ–Ω–∏–µ " << ref << endl;
 
+        auto matching_start = chrono::high_resolution_clock::now();
         vector<Mat> local_forward(n - 1);
         for (int i = 0; i < n - 1; i++) {
             auto matches = match(images[i].descriptors, images[i + 1].descriptors);
@@ -491,8 +492,14 @@ public:
             vector<DMatch> sel(matches.begin(), matches.begin() + maxm);
             int inl;
             local_forward[i] = ransac(images[i].keypoints, images[i + 1].keypoints, sel, images[i].image.size(), inl);
-            cout << "  œ‡˚ " << i << "->" << i + 1 << ": " << inl << " inliers" << endl;
+            float inlier_ratio = (float)inl / matches.size() * 100.0f;
+            inlier_ratios.push_back(inlier_ratio);
+            cout << "  –ü–∞—Ä—ã " << i << "->" << i + 1 << ": " << inl << " inliers (–¥–æ–ª—è: " << inlier_ratio << "%)" << endl;
         }
+
+        auto matching_end = chrono::high_resolution_clock::now();
+        chrono::duration<double> matching_elapsed = matching_end - matching_start;
+        time_matching_homography += matching_elapsed.count();
 
         global_homographies.resize(n);
         inverse_global.resize(n);
@@ -525,8 +532,8 @@ public:
 
         int off_x = (int)floor(max(0.0f, -min_x)), off_y = (int)floor(max(0.0f, -min_y));
         int pw = (int)ceil(max_x - min_x), ph = (int)ceil(max_y - min_y);
-        cout << "œ‡ÌÓ‡Ï‡: " << pw << "x" << ph << endl;
-
+        cout << "–ü–∞–Ω–æ—Ä–∞–º–∞: " << pw << "x" << ph << endl;
+        auto stitch_start = chrono::high_resolution_clock::now();
 
         Mat accum_r = Mat::zeros(ph, pw, CV_32F);
         Mat accum_g = Mat::zeros(ph, pw, CV_32F);
@@ -589,7 +596,10 @@ public:
             }
         }
 
-        cout << "œ‡ÌÓ‡Ï‡ ÒÓÁ‰‡Ì‡" << endl;
+        cout << "–ü–∞–Ω–æ—Ä–∞–º–∞ —Å–æ–∑–¥–∞–Ω–∞" << endl;
+        auto stitch_end = chrono::high_resolution_clock::now();
+        chrono::duration<double> stitch_elapsed = stitch_end - stitch_start;
+        time_stitching += stitch_elapsed.count();
         return result;
     }
 
@@ -597,7 +607,7 @@ public:
 
     Mat stitch() {
         if (images.size() < 2) {
-            cerr << "ÕÂÓ·ıÓ‰ËÏÓ Í‡Í ÏËÌËÏÛÏ 2 ËÁÓ·‡ÊÂÌËˇ" << endl;
+            cerr << "–ù–µ–æ–±—Ö–æ–¥–∏–º–æ –∫–∞–∫ –º–∏–Ω–∏–º—É–º 2 –∏–∑–æ–±—Ä–∞–∂–µ–Ω–∏—è" << endl;
             return Mat();
         }
 
@@ -610,8 +620,8 @@ public:
 
         auto total_start = chrono::high_resolution_clock::now();
 
-        cout << "\n========== —ÿ»¬ ¿ " << images.size() << " »«Œ¡–¿∆≈Õ»… ==========" << endl;
-        cout << "–ÂÊËÏ: " << (mode == StitchingMode::FAST ? "¡€—“–€…" : " ¿◊≈—“¬≈ÕÕ€…") << endl;
+        cout << "\n========== –°–®–ò–í–ö–ê " << images.size() << " –ò–ó–û–ë–†–ê–ñ–ï–ù–ò–ô ==========" << endl;
+        cout << "–†–µ–∂–∏–º: " << (mode == StitchingMode::FAST ? "–ë–´–°–¢–†–´–ô" : "–ö–ê–ß–ï–°–¢–í–ï–ù–ù–´–ô") << endl;
 
         if (mode == StitchingMode::FAST) {
             panorama = stitchFast();
@@ -624,26 +634,26 @@ public:
         chrono::duration<double> total_elapsed = total_end - total_start;
 
 
-        cout << "\n========== —“¿“»—“» ¿ ==========" << endl;
-        cout << "¬ÂÏˇ ‰ÂÚÂÍÚËÓ‚‡ÌËˇ: " << time_detection << " ÒÂÍ" << endl;
-        cout << "¬ÂÏˇ ÒÓÔÓÒÚ‡‚ÎÂÌËˇ Ë ÒÓÁ‰‡ÌËˇ „ÓÏÓ„‡ÙËÈ: " << time_matching_homography << " ÒÂÍ" << endl;
-        cout << "¬ÂÏˇ Ò¯Ë‚‡ÌËˇ: " << time_stitching << " ÒÂÍ" << endl;
-        cout << "Œ·˘ÂÂ ‚ÂÏˇ: " << total_elapsed.count() << " ÒÂÍ" << endl;
+        cout << "\n========== –°–¢–ê–¢–ò–°–¢–ò–ö–ê ==========" << endl;
+        cout << "–í—Ä–µ–º—è –¥–µ—Ç–µ–∫—Ç–∏—Ä–æ–≤–∞–Ω–∏—è: " << time_detection << " —Å–µ–∫" << endl;
+        cout << "–í—Ä–µ–º—è —Å–æ–ø–æ—Å—Ç–∞–≤–ª–µ–Ω–∏—è –∏ —Å–æ–∑–¥–∞–Ω–∏—è –≥–æ–º–æ–≥—Ä–∞—Ñ–∏–π: " << time_matching_homography << " —Å–µ–∫" << endl;
+        cout << "–í—Ä–µ–º—è —Å—à–∏–≤–∞–Ω–∏—è: " << time_stitching << " —Å–µ–∫" << endl;
+        cout << "–û–±—â–µ–µ –≤—Ä–µ–º—è: " << total_elapsed.count() << " —Å–µ–∫" << endl;
 
 
         if (!keypoints_count.empty()) {
             double avg_keypoints = accumulate(keypoints_count.begin(), keypoints_count.end(), 0.0) / keypoints_count.size();
-            cout << "\n—Â‰ÌÂÂ ÍÓÎË˜ÂÒÚ‚Ó ÍÎ˛˜Â‚˚ı ÚÓ˜ÂÍ: " << avg_keypoints << endl;
+            cout << "\n–°—Ä–µ–¥–Ω–µ–µ –∫–æ–ª–∏—á–µ—Å—Ç–≤–æ –∫–ª—é—á–µ–≤—ã—Ö —Ç–æ—á–µ–∫: " << avg_keypoints << endl;
         }
 
         if (!matches_after_ratio.empty()) {
             double avg_matches = accumulate(matches_after_ratio.begin(), matches_after_ratio.end(), 0.0) / matches_after_ratio.size();
-            cout << "—Â‰ÌÂÂ ÒÓÓÚ‚ÂÚÒÚ‚ËÈ ÔÓÒÎÂ ratio test: " << avg_matches << endl;
+            cout << "–°—Ä–µ–¥–Ω–µ–µ —Å–æ–æ—Ç–≤–µ—Ç—Å—Ç–≤–∏–π –ø–æ—Å–ª–µ ratio test: " << avg_matches << endl;
         }
 
         if (!inlier_ratios.empty()) {
             double avg_inlier_ratio = accumulate(inlier_ratios.begin(), inlier_ratios.end(), 0.0) / inlier_ratios.size();
-            cout << "—Â‰Ìˇˇ ‰ÓÎˇ inliers: " << avg_inlier_ratio << "%" << endl;
+            cout << "–°—Ä–µ–¥–Ω—è—è –¥–æ–ª—è inliers: " << avg_inlier_ratio << "%" << endl;
         }
 
         cout << "================================" << endl;
@@ -653,10 +663,10 @@ public:
     }
 
     bool savePanorama(const string& filename, int quality = 95) {
-        if (panorama.empty()) { cerr << "ÕÂÚ Ô‡ÌÓ‡Ï˚ ‰Îˇ ÒÓı‡ÌÂÌËˇ" << endl; return false; }
+        if (panorama.empty()) { cerr << "–ù–µ—Ç –ø–∞–Ω–æ—Ä–∞–º—ã –¥–ª—è —Å–æ—Ö—Ä–∞–Ω–µ–Ω–∏—è" << endl; return false; }
         vector<int> params = { IMWRITE_JPEG_QUALITY, quality };
         bool ok = imwrite(filename, panorama, params);
-        if (ok) cout << "—Óı‡ÌÂÌÓ: " << filename << " (" << panorama.cols << "x" << panorama.rows << ")" << endl;
+        if (ok) cout << "–°–æ—Ö—Ä–∞–Ω–µ–Ω–æ: " << filename << " (" << panorama.cols << "x" << panorama.rows << ")" << endl;
         return ok;
     }
 
@@ -696,13 +706,13 @@ int main(int argc, char** argv) {
 
     for (int i = 2; i < argc - 1; i++) {
         if (!stitcher.addImage(argv[i])) {
-            cerr << "Œ¯Ë·Í‡ Á‡„ÛÁÍË ËÁÓ·‡ÊÂÌËˇ: " << argv[i] << endl;
+            cerr << "–û—à–∏–±–∫–∞ –∑–∞–≥—Ä—É–∑–∫–∏ –∏–∑–æ–±—Ä–∞–∂–µ–Ω–∏—è: " << argv[i] << endl;
             return -1;
         }
     }
 
     if (stitcher.getImageCount() < 2) {
-        cout << "ÕÂÓ·ıÓ‰ËÏÓ Í‡Í ÏËÌËÏÛÏ 2 ËÁÓ·‡ÊÂÌËˇ" << endl;
+        cout << "–ù–µ–æ–±—Ö–æ–¥–∏–º–æ –∫–∞–∫ –º–∏–Ω–∏–º—É–º 2 –∏–∑–æ–±—Ä–∞–∂–µ–Ω–∏—è" << endl;
         return -1;
     }
 
@@ -713,7 +723,7 @@ int main(int argc, char** argv) {
         cout << "PANORAMA_SAVED:" << output_file << endl;
     }
     else {
-        cout << "PANORAMA_ERROR: Œ¯Ë·Í‡ ÒÓÁ‰‡ÌËˇ Ô‡ÌÓ‡Ï˚" << endl;
+        cout << "PANORAMA_ERROR: –û—à–∏–±–∫–∞ —Å–æ–∑–¥–∞–Ω–∏—è –ø–∞–Ω–æ—Ä–∞–º—ã" << endl;
         return -1;
     }
 
